@@ -36,4 +36,31 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+router.put('/:_id', async (req, res, next) => {
+    try {
+        const _id = req.params._id;
+        const { name, gender, age, roll } = req.body;
+
+        const dataUpdated = await Stud.findByIdAndUpdate(_id, { name, gender, age, roll });
+
+        if (dataUpdated) {
+            res.status(200).json({
+                status: true,
+                msg: "Data updated successfully",
+            })
+        } else {
+            res.status(404).json({
+                status: false,
+                msg: "User ID Not matched or found",
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            msg: error.message,
+        })
+    }
+
+})
+
 module.exports = router;

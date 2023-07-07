@@ -2,10 +2,26 @@ const express = require('express');
 const router = express.Router();
 const Stud = require('../models/model.student');
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        msg: "Student get req",
-    })
+router.get('/:age', async (req, res, next) => {
+    try {
+        const age = req.params.age;
+        const students = await Stud.find({ age });
+        console.log(students);
+        if (students) {
+            res.status(200).json({
+                students
+            })
+        } else {
+            res.status(404).json({
+                msg: "Data not found",
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            msg: "Cannot get data",
+            error: error.message
+        })
+    }
 })
 
 router.post('/', async (req, res, next) => {
